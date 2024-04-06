@@ -14,14 +14,14 @@ spec:
 kind: Pod
 apiVersion: v1
 metadata:
-  name: pod-demo
+  name: mysql
 spec:
   volumes:
     - name: pvc-demo-vol
       persistentVolumeClaim:
        claimName: pvc-demo
   containers:
-    - name: pod-demo
+    - name: mysql
       image: mysql:8.0
       env:
       - name: MYSQL_ROOT_PASSWORD
@@ -41,7 +41,7 @@ spec:
           memory: 80Mi
       ports:
         - containerPort: 3306
-          name: "http-server"
+          name: "mysql"
       volumeMounts:
         - mountPath: "/usr/share/nginx/html"
           name: pvc-demo-vol
