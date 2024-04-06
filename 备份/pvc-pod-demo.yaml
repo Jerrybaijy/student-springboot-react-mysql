@@ -11,17 +11,17 @@ spec:
       storage: 30Gi
   storageClassName: standard-rwo
 ---
-kind: Deployment
+kind: Pod
 apiVersion: v1
 metadata:
-  name: mysql
+  name: pod-demo
 spec:
   volumes:
     - name: pvc-demo-vol
       persistentVolumeClaim:
        claimName: pvc-demo
   containers:
-    - name: mysql
+    - name: pod-demo
       image: mysql:8.0
       env:
       - name: MYSQL_ROOT_PASSWORD
@@ -41,7 +41,7 @@ spec:
           memory: 80Mi
       ports:
         - containerPort: 3306
-          name: "mysql"
+          name: "http-server"
       volumeMounts:
         - mountPath: "/usr/share/nginx/html"
           name: pvc-demo-vol
