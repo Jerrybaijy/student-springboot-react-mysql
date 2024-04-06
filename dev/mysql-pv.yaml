@@ -5,22 +5,23 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: manual
+  storageClassName: standard
   capacity:
     storage: 20Gi
   accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "/mnt/data"
+    - ReadOnlyMany  # 修改为只读多访问模式
+  gcePersistentDisk:  # 将 hostPath 更改为 gcePersistentDisk
+    pdName: mysql-pv-volume
+    fsType: ext4
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
 spec:
-  storageClassName: manual
+  storageClassName: standard  # 修改为 standard 存储类
   accessModes:
-    - ReadWriteOnce
+    - ReadOnlyMany  # 修改为只读多访问模式
   resources:
     requests:
       storage: 20Gi
