@@ -2,8 +2,6 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: mysql-storage
-provisioner: pd.csi.storage.gke.io  # 选择合适的存储插件，这里以 GKE Persistent Disk 为例
+provisioner: kubernetes.io/gce-pd
 parameters:
-  type: pd-balanced  # 选择合适的存储类型，这里以标准 Persistent Disk 为例
-reclaimPolicy: Delete  # 回收策略，根据需求选择
-allowVolumeExpansion: true  # 是否允许卷扩展，根据需求选择
+  type: pd-standard
