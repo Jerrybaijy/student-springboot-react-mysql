@@ -9,7 +9,7 @@ spec:
   capacity:
     storage: 20Gi
   accessModes:
-    - ReadOnlyMany  # 修改为只读多访问模式
+    - ReadWriteOnce
   gcePersistentDisk:  # 将 hostPath 更改为 gcePersistentDisk
     pdName: pvc-c39e909b-112b-417f-9406-ac2bc3399562
     fsType: pd-balanced
@@ -21,7 +21,7 @@ metadata:
 spec:
   storageClassName: standard  # 修改为 standard 存储类
   accessModes:
-    - ReadOnlyMany  # 修改为只读多访问模式
+    - ReadWriteOnce
   resources:
     requests:
       storage: 20Gi
