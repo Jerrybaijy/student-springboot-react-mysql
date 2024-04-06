@@ -1,40 +1,59 @@
+# pvc-pod-demo.yaml
 apiVersion: v1
-kind: PersistentVolume
+kind: PersistentVolumeClaim
 metadata:
-  annotations:
-    pv.kubernetes.io/provisioned-by: pd.csi.storage.gke.io
-  finalizers:
-  - kubernetes.io/pv-protection
-  - external-attacher/pd-csi-storage-gke-io
-  name: pvc-c9a44c07-cffa-4cd8-b92b-15bac9a9b984
-  uid: d52af557-edf5-4f96-8e89-42a3008209e6
+  name: pvc-demo
 spec:
   accessModes:
-  - ReadWriteOnce
-  capacity:
-    storage: 30Gi
-  claimRef:
-    apiVersion: v1
-    kind: PersistentVolumeClaim
-    name: pvc-demo
-    namespace: default
-    uid: c9a44c07-cffa-4cd8-b92b-15bac9a9b984
-  csi:
-    driver: pd.csi.storage.gke.io
-    csi.storage.k8s.io/fstype: ext4
-    volumeAttributes:
-      storage.kubernetes.io/csiProvisionerIdentity: 1660085000920-8081-pd.csi.storage.gke.io
-    volumeHandle: projects/xxx/zones/us-central1-c/disks/pvc-c9a44c07-cffa-4cd8-b92b-15bac9a9b984
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: topology.gke.io/zone
-          operator: In
-          values:
-          - us-central1-c
-  persistentVolumeReclaimPolicy: Delete
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 30Gi
   storageClassName: standard-rwo
-  volumeMode: Filesystem
-status:
-  phase: Bound
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pod-demo
+spec:
+  volumes:
+    - name: pvc-demo-vol
+      persistentVolumeClaim:
+       claimName: pvc-demo
+  containers:
+    - name: pod-demo
+      image: mysql:8.0
+      env:
+      - name: MYSQL_ROOT_PASSWORD
+        value: "123456"
+      - name: MYSQL_DATABASE
+        value: "fullstack"
+      - name: MYSQL_USER
+        value: "jerry"
+      - name: MYSQL_PASSWORD
+        value: "123456"
+      resources:
+        limits:
+          cpu: 10m
+          memory: 80Mi
+        requests:
+          cpu: 10m
+          memory: 80Mi
+      ports:
+        - containerPort: 3306
+          name: "http-server"
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: pvc-demo-vol
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+  selector:
+    app: mysql
