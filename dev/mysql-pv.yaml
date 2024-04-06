@@ -19,7 +19,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
 spec:
-  storageClassName: standard  # 修改为 standard 存储类
+  storageClassName: standard-rwo  # 修改为 standard 存储类
   accessModes:
     - ReadWriteOnce
   resources:
