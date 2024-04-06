@@ -11,7 +11,7 @@ spec:
   accessModes:
     - ReadWriteMany
   gcePersistentDisk:
-    pdName: new-debian
+    pdName: mysql-storage
     fsType: ext4
 ---
 apiVersion: v1
