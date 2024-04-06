@@ -11,8 +11,8 @@ spec:
   accessModes:
     - ReadOnlyMany  # 修改为只读多访问模式
   gcePersistentDisk:  # 将 hostPath 更改为 gcePersistentDisk
-    pdName: mysql-pv-volume
-    fsType: ext4
+    pdName: new-debian
+    fsType: pd-balanced
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
