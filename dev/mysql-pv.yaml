@@ -1,25 +1,9 @@
 apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: mysql-pv-volume
-  labels:
-    type: local
-spec:
-  storageClassName: standard
-  capacity:
-    storage: 20Gi
-  accessModes:
-    - ReadWriteOnce
-  gcePersistentDisk:  # 将 hostPath 更改为 gcePersistentDisk
-    pdName: pvc-c39e909b-112b-417f-9406-ac2bc3399562
-    fsType: pd-balanced
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
 spec:
-  storageClassName: standard-rwo  # 修改为 standard 存储类
+  storageClassName: standard-rwo
   accessModes:
     - ReadWriteOnce
   resources:
