@@ -15,36 +15,46 @@ kind: Pod
 apiVersion: v1
 metadata:
   name: mysql
+
 spec:
-  volumes:
-    - name: pvc-demo-vol
-      persistentVolumeClaim:
-       claimName: pvc-demo
-  containers:
-    - name: mysql
-      image: mysql:8.0
-      env:
-      - name: MYSQL_ROOT_PASSWORD
-        value: "123456"
-      - name: MYSQL_DATABASE
-        value: "fullstack"
-      - name: MYSQL_USER
-        value: "jerry"
-      - name: MYSQL_PASSWORD
-        value: "123456"
-      resources:
-        limits:
-          cpu: 10m
-          memory: 80Mi
-        requests:
-          cpu: 10m
-          memory: 80Mi
-      ports:
-        - containerPort: 3306
-          name: "mysql"
-      volumeMounts:
-        - mountPath: "/usr/share/nginx/html"
-          name: pvc-demo-vol
+  selector:
+    matchLabels:
+      app: mysql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysql
+  spec:
+    volumes:
+      - name: pvc-demo-vol
+        persistentVolumeClaim:
+        claimName: pvc-demo
+    containers:
+      - name: mysql
+        image: mysql:8.0
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "123456"
+        - name: MYSQL_DATABASE
+          value: "fullstack"
+        - name: MYSQL_USER
+          value: "jerry"
+        - name: MYSQL_PASSWORD
+          value: "123456"
+        resources:
+          limits:
+            cpu: 10m
+            memory: 80Mi
+          requests:
+            cpu: 10m
+            memory: 80Mi
+        ports:
+          - containerPort: 3306
+            name: "mysql"
+        volumeMounts:
+          - mountPath: "/usr/share/nginx/html"
+            name: pvc-demo-vol
 
 ---
 apiVersion: v1
@@ -52,8 +62,9 @@ kind: Service
 metadata:
   name: mysql
 spec:
-  ports:
-  - port: 3306
-    targetPort: 3306
   selector:
     app: mysql
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
